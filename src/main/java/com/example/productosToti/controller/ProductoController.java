@@ -48,7 +48,7 @@ public class ProductoController {
 
     @PostMapping
     public ResponseEntity<ProductResponse> save(@Valid @RequestBody ProductRequest producto) {
-        Producto productSaved = service.save(toEntity(producto));
+        Producto productSaved = service.save(toEntity(producto), producto.categoryId());
         return ResponseEntity.status(HttpStatus.CREATED).body(toResponse(productSaved));
     }
 
@@ -63,13 +63,14 @@ public class ProductoController {
 
     @PutMapping("/{id}")
     public ResponseEntity<ProductResponse> update(@PathVariable Long id, @Valid @RequestBody ProductRequest producto) {
-        Optional<Producto> updated = service.update(id, toEntity(producto));
+        Optional<Producto> updated = service.update(id, toEntity(producto), producto.categoryId());
         return updated.map(value -> ResponseEntity.ok(toResponse(value)))
                 .orElseGet(() -> ResponseEntity.notFound().build());
     }
 
     private ProductResponse toResponse(Producto producto) {
-        return new ProductResponse(producto.getId(), producto.getName(), producto.getPrice(), producto.getStock());
+        return new ProductResponse(producto.getId(), producto.getName(), producto.getPrice(), producto.getStock(),
+                producto.getCategory().getId(), producto.getCategory().getName());
     }
 
     private Producto toEntity(ProductRequest request) {

@@ -14,5 +14,8 @@ public record ProductRequest(
         Double price,
 
         @PositiveOrZero(message = "Stock cannot be negative")
-        int stock) {
+        int stock,
+
+        @NotNull(message = "Category is mandatory")
+        Long categoryId) {
 }

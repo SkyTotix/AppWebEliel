@@ -3,6 +3,8 @@ import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
+import jakarta.persistence.JoinColumn;
+import jakarta.persistence.ManyToOne;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Positive;
@@ -23,12 +25,20 @@ public class Producto {
     @NotNull(message = "Price is mandatory")
     @Positive(message = "Price must be greater than 0")
     private Double price;
+    @ManyToOne 
+    @JoinColumn(name = "category_id", nullable = false)
+    private Category category;
     
     public Producto(Long id, String name, int stock, Double price) {
         this.id = id;
         this.name = name;
         this.stock = stock;
         this.price = price;
+    }
+
+    public Producto(Long id, String name, int stock, Double price, Category category) {
+        this(id, name, stock, price);
+        this.category = category;
     }
     public Producto() {
     }
@@ -55,5 +65,13 @@ public class Producto {
     }
     public void setPrice(Double price) {
         this.price = price;
+    }
+
+    public Category getCategory() {
+        return category;
+    }
+
+    public void setCategory(Category category) {
+        this.category = category;
     }
 }
